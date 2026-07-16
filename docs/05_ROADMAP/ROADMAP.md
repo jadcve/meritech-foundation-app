@@ -1,62 +1,29 @@
-# Roadmap de Meritech Foundation
+# Roadmap
 
-Este roadmap define las primeras etapas de Foundation. No representa implementacion inmediata de funcionalidades; ordena la evolucion del producto tecnologico.
+## Fase 0: Base documental
 
-## Sprint 0: Fundacion Documental
+- Completar documentacion de producto.
+- Completar documentacion de arquitectura.
+- Registrar ADR inicial.
+- Crear reglas de desarrollo.
+- Crear guias de agentes.
 
-Objetivos:
+## Fase 1: Criterios tecnicos
 
-- Reemplazar la presentacion generica de Laravel por la identidad Meritech Foundation.
-- Crear estructura documental base.
-- Definir vision del producto.
-- Definir arquitectura conceptual.
-- Registrar la primera decision arquitectonica.
-- Listar modulos candidatos sin implementarlos.
-- Establecer reglas de contribucion.
+- Definir convenciones por capa.
+- Documentar criterios para ampliar Core.
+- Preparar ADRs para modulos candidatos.
+- Formalizar estrategia de pruebas.
 
-Resultado esperado:
+## Fase 2: Modularidad controlada
 
-Foundation queda definida como producto tecnologico independiente, con limites iniciales claros.
+- Priorizar modulos reutilizables.
+- Documentar contratos antes de implementar.
+- Validar dependencias entre Core, Modules, Shared y Support.
 
-## Sprint 1: Limites Tecnicos Base
+## Fase 3: Preparacion para productos consumidores
 
-Objetivos:
+- Definir guias de adopcion.
+- Documentar configuracion por producto.
+- Preparar checklist de seguridad, tenancy y despliegue.
 
-- Definir convenciones de carpetas futuras.
-- Precisar responsabilidades de Core, Modules, Domains, Shared y Support.
-- Establecer criterios para crear el primer modulo.
-- Definir formato de ADRs futuros.
-- Definir criterios de pruebas para capacidades reutilizables.
-
-Resultado esperado:
-
-El equipo puede evaluar nuevas capacidades sin improvisar estructura.
-
-## Sprint 2: Especificacion Modular
-
-Objetivos:
-
-- Priorizar modulos candidatos.
-- Definir alcance funcional de los primeros modulos.
-- Separar modulos base de modulos opcionales.
-- Identificar dependencias entre Auth, Users, Roles, Permissions y Tenancy.
-- Documentar riesgos de acoplamiento temprano.
-
-Resultado esperado:
-
-Foundation cuenta con un mapa modular claro antes de escribir implementaciones.
-
-## Sprint 3: Preparacion Para Implementacion
-
-Objetivos:
-
-- Seleccionar el primer modulo a implementar.
-- Definir criterios de aceptacion.
-- Definir contratos o convenciones necesarias.
-- Preparar estrategia de pruebas.
-- Revisar si se requiere algun paquete externo.
-- Registrar ADRs adicionales antes de modificar codigo.
-
-Resultado esperado:
-
-El proyecto queda listo para iniciar implementacion controlada, con decisiones documentadas y alcance limitado.
