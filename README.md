@@ -1,58 +1,76 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Meritech Foundation
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Meritech Foundation es la base tecnologica oficial para construir productos SaaS reutilizables dentro del ecosistema Meritech.
 
-## About Laravel
+No es Nexura, Restaurant, Menu, CRM ni ERP. Tampoco es un framework independiente. Foundation es el punto de partida comun sobre el que Meritech podra crear, mantener y escalar productos digitales con una arquitectura consistente.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Proposito
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Foundation existe para separar la base tecnica reutilizable de los productos finales. Su responsabilidad es definir una estructura clara para futuros modulos, dominios, servicios compartidos y reglas de desarrollo, evitando que cada producto de Meritech vuelva a resolver los mismos problemas desde cero.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Objetivos
 
-## Learning Laravel
+- Establecer una arquitectura base para productos SaaS de Meritech.
+- Mantener una separacion clara entre Core, Modules, Domains, Shared y Support.
+- Permitir que nuevos productos se construyan con criterios comunes.
+- Documentar decisiones antes de implementar funcionalidades.
+- Reducir acoplamiento entre productos especificos y capacidades reutilizables.
+- Proteger a Foundation de convertirse en una copia de un producto existente.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Filosofia
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Foundation parte desde Laravel limpio, pero no se define por Laravel. Laravel es el stack base; Foundation es la arquitectura, los acuerdos y la direccion tecnica que Meritech usara para construir productos.
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+La filosofia del producto es:
 
-## Agentic Development
+- Primero arquitectura, luego implementacion.
+- Primero decisiones explicitas, luego codigo.
+- Primero limites claros, luego modulos.
+- Reutilizable no significa generico sin criterio.
+- Cada modulo debe tener una razon real para existir.
+- Los productos finales no deben contaminar el Core.
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Stack Base
 
-```bash
-composer require laravel/boost --dev
+- PHP
+- Laravel
+- Composer
+- Node.js
+- Vite
+- Tailwind CSS
+- MySQL o base de datos compatible segun producto
 
-php artisan boost:install
-```
+Este stack puede evolucionar, pero cualquier cambio relevante debe quedar registrado como decision arquitectonica.
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+## Vision
 
-## Contributing
+Meritech Foundation sera la plataforma interna que permita crear productos SaaS con velocidad, consistencia y control. Su valor no esta en implementar todo desde el primer dia, sino en definir una base que pueda crecer sin perder identidad.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Foundation debera permitir construir productos como:
 
-## Code of Conduct
+- plataformas multiusuario;
+- soluciones con roles y permisos;
+- sistemas con configuracion por producto o cliente;
+- productos con identidad visual configurable;
+- aplicaciones con notificaciones, auditoria, medios, busqueda y pagos;
+- soluciones SaaS reutilizables para distintos mercados.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Roadmap Resumido
 
-## Security Vulnerabilities
+- Sprint 0: documentar vision, arquitectura, decisiones iniciales y reglas de desarrollo.
+- Sprint 1: definir limites tecnicos del Core y convenciones base.
+- Sprint 2: especificar catalogo de modulos candidatos sin implementarlos.
+- Sprint 3: preparar criterios para iniciar implementacion modular controlada.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Documentacion
 
-## License
+La documentacion principal vive en:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- `docs/00_PRODUCT/`
+- `docs/01_ARCHITECTURE/`
+- `docs/02_DECISIONS/`
+- `docs/03_MODULES/`
+- `docs/04_DEVELOPMENT/`
+- `docs/05_ROADMAP/`
+
+Foundation comienza como una decision de producto y arquitectura. El codigo vendra despues.
