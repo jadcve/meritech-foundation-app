@@ -21,4 +21,12 @@ return [
             'authenticated_routes' => true,
         ],
     ],
+
+    'tenancy' => [
+        'enabled' => true,
+        'fail_closed' => true,
+        'bypass' => [
+            'enabled' => false,
+        ],
+    ],
 ];
