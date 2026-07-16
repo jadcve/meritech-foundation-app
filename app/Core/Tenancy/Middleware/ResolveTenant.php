@@ -14,6 +14,10 @@ class ResolveTenant
         if (($user = $request->user()) !== null && ($tenant = app(TenantResolverContract::class)->resolve($user)) !== null) {
             app(TenantContext::class)->set($tenant);
         }
-        try { return $next($request); } finally { app(TenantContext::class)->clear(); }
+        try {
+            return $next($request);
+        } finally {
+            app(TenantContext::class)->clear();
+        }
     }
 }
