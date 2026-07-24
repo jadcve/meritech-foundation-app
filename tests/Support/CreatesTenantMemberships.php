@@ -5,7 +5,11 @@ namespace Tests\Support;
 use App\Core\Tenancy\Models\Tenant;
 use App\Core\Tenancy\Models\TenantMembership;
 use App\Models\User;
+use Database\Seeders\FoundationPermissionSeeder;
+use Database\Seeders\FoundationRoleSeeder;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 trait CreatesTenantMemberships
 {
@@ -30,5 +34,31 @@ trait CreatesTenantMemberships
         ], $attributes));
 
         return $tenant;
+    }
+
+    protected function assignTenantRole(User $user, Tenant $tenant, string $role): void
+    {
+        app(PermissionRegistrar::class)->setPermissionsTeamId($tenant->getKey());
+
+        $user->assignRole(Role::findOrCreate($role, 'web'));
+
+        app(PermissionRegistrar::class)->setPermissionsTeamId(null);
+        $user->unsetRelation('roles');
+    }
+
+    protected function seedFoundationAuthorization(): void
+    {
+        $this->seed(FoundationPermissionSeeder::class);
+        $this->seed(FoundationRoleSeeder::class);
+    }
+
+    protected function activatePermissionTeam(Tenant $tenant): void
+    {
+        app(PermissionRegistrar::class)->setPermissionsTeamId($tenant->getKey());
+    }
+
+    protected function clearPermissionTeam(): void
+    {
+        app(PermissionRegistrar::class)->setPermissionsTeamId(null);
     }
 }

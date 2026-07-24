@@ -23,6 +23,7 @@
 - Validar dependencias entre Core, Modules, Shared y Support.
 - Evaluar selector de tenant, cambio por sesion y politicas de acceso despues de Tenancy v1.
 - Mantener roles por tenant y permisos fuera de Tenancy v1 hasta ADR especifica.
+- Cerrar Authorization v1 con Spatie teams, roles genericos Foundation, permisos genericos Foundation, fail-closed y pruebas de aislamiento.
 
 ## Fase 3: Preparacion para productos consumidores
 
