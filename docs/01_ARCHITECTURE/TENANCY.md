@@ -44,3 +44,9 @@ La deuda heredada de roles/permisos queda documentada: si existen dependencias o
 Esta version no introduce seleccion manual de tenant, roles de negocio, billing, plan, subscription ni aislamiento automatico de datos de producto. El bypass de superadmin queda detras de `TenantBypassPolicy` y no usa correos hardcodeados.
 
 La decision formal esta registrada en `docs/02_DECISIONS/ADR-002-TENANCY-V1.md`.
+
+## Relacion Con Authorization
+
+Tenancy no contiene roles ni permisos. Authorization v1 usa Spatie Laravel Permission con teams y toma el `tenant_id` resuelto como contexto de autorizacion.
+
+`tenant.resolve` sigue siendo opt-in y debe ejecutarse antes de cualquier middleware tenant-aware de autorizacion. `TenantBypassPolicy` no concede permisos.
