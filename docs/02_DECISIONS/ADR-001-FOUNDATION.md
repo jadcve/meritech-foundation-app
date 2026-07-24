@@ -1,4 +1,4 @@
-# ADR-001: Foundation nace desde Laravel limpio
+# ADR-001: Foundation nace como base agnostica
 
 ## Estado
 
@@ -6,37 +6,22 @@ Aprobada.
 
 ## Decision
 
-Nexura permanecera independiente y Meritech Foundation nace desde Laravel limpio.
+Meritech Foundation nace como una base tecnologica agnostica del negocio, construida sobre Laravel y documentada antes de ampliar su superficie funcional.
 
-Foundation no sera una extraccion directa de Nexura ni una evolucion renombrada de ningun producto existente. Sera la base tecnologica oficial para construir productos SaaS reutilizables dentro de Meritech.
+Foundation no sera una extraccion directa ni una evolucion renombrada de ningun producto existente. Sera la base oficial para construir productos SaaS reutilizables dentro de Meritech.
 
 ## Contexto
 
-Meritech necesita una plataforma base para construir productos SaaS con arquitectura comun. Existen productos o ideas previas que pueden inspirar aprendizajes, pero Foundation debe evitar heredar decisiones, nombres, acoplamientos o reglas de negocio de un producto especifico.
+Meritech necesita una plataforma base para crear productos SaaS con arquitectura comun. Pueden existir aprendizajes previos, pero Foundation debe evitar heredar nombres, acoplamientos o reglas de negocio de un producto especifico.
 
-Partir desde Laravel limpio permite definir primero la arquitectura, luego los modulos y finalmente las implementaciones necesarias.
-
-## Ventajas
-
-- Evita arrastrar deuda tecnica de productos existentes.
-- Mantiene a Nexura independiente.
-- Permite definir una identidad propia para Foundation.
-- Reduce el riesgo de mezclar base tecnologica con producto final.
-- Facilita documentar decisiones antes de codificar.
-- Permite construir modulos reutilizables con limites claros.
-
-## Riesgos
-
-- Puede tomar mas tiempo llegar a funcionalidades visibles.
-- Requiere disciplina para no copiar estructuras de productos existentes sin revision.
-- Puede generar duplicacion temporal entre Foundation y productos independientes.
-- Exige documentacion constante para evitar ambiguedades.
+Partir desde una base limpia permite definir primero arquitectura, limites, reglas de colaboracion y decisiones, dejando la implementacion funcional para etapas posteriores.
 
 ## Consecuencias
 
-- Foundation se tratara como producto tecnologico propio.
-- Nexura no sera migrado automaticamente a Foundation.
-- El repositorio debe dejar de presentarse como proyecto Laravel generico.
-- Las primeras tareas deben ser documentales y arquitectonicas.
-- Toda funcionalidad futura debe justificarse dentro de la vision modular de Foundation.
-- Las decisiones arquitectonicas relevantes se registraran mediante ADRs.
+- Foundation se trata como producto tecnologico propio.
+- La documentacion precede a la funcionalidad nueva.
+- El Core debe permanecer pequeno, estable y agnostico.
+- Toda funcionalidad futura debe justificarse dentro de la vision modular.
+- Las decisiones arquitectonicas relevantes se registran mediante ADR.
+- Si hay duda entre reutilizar una convencion existente o crear una nueva, la decision debe documentarse.
+

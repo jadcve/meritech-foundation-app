@@ -12,7 +12,7 @@ class FoundationServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../../../config/foundation.php', 'foundation');
-        $this->app->singleton(TenantContext::class);
+        $this->app->scoped(TenantContext::class);
         $this->app->bind(TenantResolverContract::class, TenantResolver::class);
     }
 }
