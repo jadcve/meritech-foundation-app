@@ -6,6 +6,12 @@ return [
 
     'auth' => [
         'provider' => 'laravel-breeze',
+
+        'public_registration' => env(
+            'FOUNDATION_PUBLIC_REGISTRATION',
+            false,
+        ),
+
         'stack' => [
             'views' => 'blade',
             'css' => 'tailwind',

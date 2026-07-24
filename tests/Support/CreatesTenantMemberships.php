@@ -2,8 +2,8 @@
 
 namespace Tests\Support;
 
-use App\Core\Tenancy\Models\TenantMembership;
 use App\Core\Tenancy\Models\Tenant;
+use App\Core\Tenancy\Models\TenantMembership;
 use App\Models\User;
 use Illuminate\Support\Str;
 

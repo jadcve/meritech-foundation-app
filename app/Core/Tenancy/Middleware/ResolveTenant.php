@@ -23,7 +23,7 @@ class ResolveTenant
             if ($tenant !== null) {
                 app(TenantContext::class)->set($tenant);
             } elseif (config('foundation.tenancy.fail_closed', true)) {
-                throw new TenantNotResolvedException();
+                throw new TenantNotResolvedException;
             }
         }
 

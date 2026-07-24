@@ -1,7 +1,7 @@
 <?php
 
-use App\Core\Tenancy\Middleware\ResolveTenant;
 use App\Core\Tenancy\Exceptions\TenantNotResolvedException;
+use App\Core\Tenancy\Middleware\ResolveTenant;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
