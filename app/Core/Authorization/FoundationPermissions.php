@@ -5,19 +5,31 @@ namespace App\Core\Authorization;
 final class FoundationPermissions
 {
     public const TENANT_VIEW = 'tenant.view';
+
     public const TENANT_UPDATE = 'tenant.update';
+
     public const MEMBERS_VIEW = 'members.view';
+
     public const MEMBERS_INVITE = 'members.invite';
+
     public const MEMBERS_UPDATE = 'members.update';
+
     public const MEMBERS_REMOVE = 'members.remove';
+
     public const ROLES_VIEW = 'roles.view';
+
     public const ROLES_MANAGE = 'roles.manage';
+
     public const SETTINGS_VIEW = 'settings.view';
+
     public const SETTINGS_UPDATE = 'settings.update';
 
     public const OWNER = 'owner';
+
     public const ADMIN = 'admin';
+
     public const MEMBER = 'member';
+
     public const VIEWER = 'viewer';
 
     public static function permissions(): array

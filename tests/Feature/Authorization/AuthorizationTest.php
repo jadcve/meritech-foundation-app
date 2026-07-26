@@ -6,7 +6,6 @@ use App\Core\Authorization\FoundationPermissions;
 use App\Core\Authorization\TenantAuthorizationContext;
 use App\Core\Tenancy\Models\TenantMembership;
 use App\Core\Tenancy\Services\TenantBypassPolicy;
-use App\Core\Tenancy\Services\TenantContext;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Route;
