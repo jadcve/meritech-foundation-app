@@ -26,6 +26,7 @@
 - Cerrar Authorization v1 con Spatie teams, roles genericos Foundation, permisos genericos Foundation, fail-closed y pruebas de aislamiento.
 - Cerrar Tenant Settings and Branding v1 con `TenantSettings`, `BrandingManager`, defaults seguros y pruebas de aislamiento.
 - Consolidar Foundation UI Architecture Review con tokens minimos, accesibilidad base, Alpine ligero y boundary futuro para React Islands opt-in.
+- Cerrar Capability System v1 con registry, config Foundation-level, contratos y ADR sin implementar capabilities concretas.
 
 ## Fase 3: Preparacion para productos consumidores
 
@@ -33,3 +34,4 @@
 - Documentar configuracion por producto.
 - Preparar checklist de seguridad, tenancy y despliegue.
 - Evaluar React Islands solo cuando exista una interaccion rica aprobada por ADR, sin convertir Foundation en SPA.
+- Definir la primera capability concreta mediante ADR antes de implementar servicios o UI.
