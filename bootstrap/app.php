@@ -1,7 +1,7 @@
 <?php
 
-use App\Core\Authorization\Middleware\ActivateTenantAuthorization;
 use App\Core\Authorization\Exceptions\TenantAuthorizationContextMissingException;
+use App\Core\Authorization\Middleware\ActivateTenantAuthorization;
 use App\Core\Tenancy\Exceptions\TenantNotResolvedException;
 use App\Core\Tenancy\Middleware\ResolveTenant;
 use Illuminate\Foundation\Application;

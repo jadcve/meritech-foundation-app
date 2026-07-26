@@ -26,7 +26,7 @@ final class TenantAuthorizationContext
         if ($tenant === null) {
             $this->clear();
 
-            throw new TenantAuthorizationContextMissingException();
+            throw new TenantAuthorizationContextMissingException;
         }
 
         $this->activate($tenant);
