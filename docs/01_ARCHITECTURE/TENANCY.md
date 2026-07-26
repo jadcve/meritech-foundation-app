@@ -50,3 +50,9 @@ La decision formal esta registrada en `docs/02_DECISIONS/ADR-002-TENANCY-V1.md`.
 Tenancy no contiene roles ni permisos. Authorization v1 usa Spatie Laravel Permission con teams y toma el `tenant_id` resuelto como contexto de autorizacion.
 
 `tenant.resolve` sigue siendo opt-in y debe ejecutarse antes de cualquier middleware tenant-aware de autorizacion. `TenantBypassPolicy` no concede permisos.
+
+## Relacion Con Branding
+
+Branding v1 usa `TenantContext` para leer settings del tenant activo mediante `BrandingManager`.
+
+Tenancy no conoce branding ni settings. Branding no resuelve tenants por su cuenta y solo debe consumirse en flujos donde `tenant.resolve` ya haya establecido el contexto.
