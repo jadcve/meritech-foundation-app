@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Tenant extends Model implements TenantContract
 {
@@ -31,6 +32,11 @@ class Tenant extends Model implements TenantContract
     public function memberships(): HasMany
     {
         return $this->hasMany(TenantMembership::class);
+    }
+
+    public function settings(): HasOne
+    {
+        return $this->hasOne(TenantSettings::class);
     }
 
     public function getTenantKey(): int|string
