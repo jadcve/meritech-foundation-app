@@ -16,6 +16,7 @@ class FoundationRoleSeeder extends Seeder
 
         Tenant::query()->where('is_active', true)->each(function (Tenant $tenant) use ($registrar): void {
             $registrar->setPermissionsTeamId($tenant->getKey());
+            $registrar->forgetCachedPermissions();
 
             foreach (FoundationPermissions::rolePermissions() as $roleName => $permissions) {
                 Role::findOrCreate($roleName, 'web')->syncPermissions($permissions);
