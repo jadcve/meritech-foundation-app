@@ -32,8 +32,10 @@ Tailwind sigue siendo el sistema principal de estilos. Los componentes usan clas
 
 Tokens actuales expuestos por `x-foundation.layout.app-shell`:
 
-- `--foundation-color-primary`
+- `--foundation-color-primary` (marca del tenant)
 - `--foundation-color-secondary`
+- `--foundation-color-accent` (vertical; si no hay vertical, repite la marca)
+- `--foundation-color-accent-secondary`
 - `--foundation-color-background`
 - `--foundation-color-surface`
 - `--foundation-color-text`
@@ -43,6 +45,10 @@ Tokens actuales expuestos por `x-foundation.layout.app-shell`:
 - `--foundation-radius-lg`
 - `--foundation-shadow-sm`
 - `--foundation-shadow-md`
+
+`primary` y `secondary` se imprimen en el elemento. El resto de tokens de superficie vive en `resources/css/app.css`, con variante `.dark`. Tailwind usa `darkMode: 'class'`.
+
+La vista previa `/ui/{vertical}` está descrita en `ADR-007`. No es un módulo de negocio.
 
 Los aliases `--foundation-primary` y `--foundation-secondary` se mantienen temporalmente por compatibilidad.
 

@@ -1,3 +1,3 @@
-<section {{ $attributes->merge(['class' => 'rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900']) }}>
+<section {{ $attributes->merge(['class' => 'rounded-3xl border border-white/80 bg-white/90 p-5 shadow-foundation backdrop-blur dark:border-slate-800 dark:bg-slate-900/90']) }}>
     {{ $slot }}
 </section>

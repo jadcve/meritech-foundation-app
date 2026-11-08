@@ -16,5 +16,7 @@ class FoundationPermissionSeeder extends Seeder
         foreach (FoundationPermissions::permissions() as $permission) {
             Permission::findOrCreate($permission, 'web');
         }
+
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
     }
 }

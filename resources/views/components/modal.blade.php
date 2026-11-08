@@ -46,7 +46,7 @@ $maxWidth = [
     x-on:keydown.tab.prevent="$event.shiftKey || nextFocusable().focus()"
     x-on:keydown.shift.tab.prevent="prevFocusable().focus()"
     x-show="show"
-    class="fixed inset-0 overflow-y-auto px-4 py-6 sm:px-0 z-50"
+    class="fixed inset-0 z-[80] overflow-y-auto px-4 py-6 sm:px-0"
     style="display: {{ $show ? 'block' : 'none' }};"
 >
     <div
@@ -65,7 +65,7 @@ $maxWidth = [
 
     <div
         x-show="show"
-        class="mb-6 bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full {{ $maxWidth }} sm:mx-auto"
+        class="relative z-10 mb-6 w-full overflow-hidden rounded-3xl bg-white shadow-xl transition-all dark:bg-slate-900 sm:w-full {{ $maxWidth }} sm:mx-auto"
         role="dialog"
         aria-modal="true"
         x-transition:enter="ease-out duration-300"

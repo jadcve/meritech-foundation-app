@@ -35,4 +35,32 @@ return [
             'enabled' => false,
         ],
     ],
+
+    /*
+    | Vistas de muestra del sistema visual. No son un módulo de negocio.
+    | En producción deben permanecer apagadas: no tienen autenticación.
+    */
+    'ui' => [
+        'showcase' => env('FOUNDATION_UI_SHOWCASE', false),
+        'verticals' => [
+            'services' => [
+                'label' => 'Servicios',
+                'accent' => '#e11d48',
+                'accent_secondary' => '#f59e0b',
+                'mark' => 'SV',
+            ],
+            'health' => [
+                'label' => 'Salud',
+                'accent' => '#1d4ed8',
+                'accent_secondary' => '#0ea5e9',
+                'mark' => 'SA',
+            ],
+            'mechanic' => [
+                'label' => 'Taller',
+                'accent' => '#ea580c',
+                'accent_secondary' => '#65a30d',
+                'mark' => 'TL',
+            ],
+        ],
+    ],
 ];

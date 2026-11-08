@@ -9,7 +9,7 @@
     ][$variant] ?? 'border-sky-200 bg-sky-50 text-sky-900 dark:border-sky-900 dark:bg-sky-950 dark:text-sky-100';
 @endphp
 
-<div role="status" {{ $attributes->merge(['class' => 'rounded-lg border p-4 text-sm '.$classes]) }}>
+<div role="status" {{ $attributes->merge(['class' => 'rounded-3xl border p-4 text-sm shadow-sm '.$classes]) }}>
     @if ($title)
         <p class="font-semibold">{{ $title }}</p>
     @endif

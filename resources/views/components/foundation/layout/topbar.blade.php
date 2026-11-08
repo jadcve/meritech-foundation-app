@@ -1,6 +1,6 @@
 @props(['title' => null])
 
-<header {{ $attributes->merge(['class' => 'sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur dark:border-slate-800 dark:bg-slate-900/95']) }}>
+<header {{ $attributes->merge(['class' => 'sticky top-0 z-30 border-b border-white/70 bg-white/75 backdrop-blur-xl dark:border-slate-800 dark:bg-slate-950/75']) }}>
     <div class="flex min-h-16 items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <div class="min-w-0">
             @isset($leading)

@@ -1,26 +1,86 @@
 @props([
     'title' => null,
+    'primary' => null,
+    'secondary' => null,
+    'accent' => null,
+    'vertical' => null,
+    'theme' => null,
 ])
 
 @php
     $branding = app(\App\Core\Branding\BrandingManager::class);
     $brandName = $title ?? $branding->name();
+
+    $safeColor = function (?string $color, string $fallback): string {
+        $color = trim((string) $color);
+
+        return preg_match('/^#[0-9A-Fa-f]{6}$/', $color) === 1 ? $color : $fallback;
+    };
+
+    $verticalKey = is_string($vertical) ? $vertical : null;
+    $preset = config('foundation.ui.verticals.'.$verticalKey);
+    $primaryColor = $safeColor($primary ?: $branding->primaryColor(), '#2563eb');
+    $secondaryColor = $safeColor($secondary ?: $branding->secondaryColor(), '#64748b');
+    $accentColor = $safeColor($accent ?: ($preset['accent'] ?? $primaryColor), $primaryColor);
+    $accentSecondary = $safeColor($preset['accent_secondary'] ?? $secondaryColor, $secondaryColor);
+    $themeMode = in_array($theme ?: $branding->theme(), ['light', 'dark', 'system'], true)
+        ? ($theme ?: $branding->theme())
+        : 'system';
 @endphp
 
 <div
     {{ $attributes->merge([
-        'class' => 'min-h-screen bg-slate-50 text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100',
+        'class' => 'foundation-shell min-h-screen antialiased'.($themeMode === 'dark' ? ' dark' : ''),
     ]) }}
-    style="--foundation-color-primary: {{ $branding->primaryColor() }}; --foundation-color-secondary: {{ $branding->secondaryColor() }}; --foundation-color-background: #f8fafc; --foundation-color-surface: #ffffff; --foundation-color-text: #0f172a; --foundation-color-muted: #64748b; --foundation-radius-sm: 0.375rem; --foundation-radius-md: 0.5rem; --foundation-radius-lg: 0.5rem; --foundation-shadow-sm: 0 1px 2px 0 rgb(15 23 42 / 0.05); --foundation-shadow-md: 0 4px 6px -1px rgb(15 23 42 / 0.1); --foundation-primary: var(--foundation-color-primary); --foundation-secondary: var(--foundation-color-secondary);"
+    data-foundation-vertical="{{ $verticalKey }}"
+    data-foundation-theme="{{ $themeMode }}"
+    x-data='{
+        navOpen: false,
+        themeMode: @json($themeMode),
+        dark: @json($themeMode === "dark"),
+        syncTheme() {
+            this.dark = this.themeMode === "dark" || (this.themeMode !== "light" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        }
+    }'
+    x-init="syncTheme()"
+    :class="{ dark: dark }"
+    style="--foundation-color-primary: {{ $primaryColor }}; --foundation-color-secondary: {{ $secondaryColor }}; --foundation-color-accent: {{ $accentColor }}; --foundation-color-accent-secondary: {{ $accentSecondary }}; --foundation-primary: var(--foundation-color-primary); --foundation-secondary: var(--foundation-color-secondary);"
 >
     <div class="flex min-h-screen">
         @isset($sidebar)
-            <aside class="hidden w-72 shrink-0 border-r border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900 lg:block">
+            <div
+                x-cloak
+                x-show="navOpen"
+                x-transition.opacity
+                class="fixed inset-0 z-40 bg-slate-950/55 backdrop-blur-sm lg:hidden"
+                @click="navOpen = false"
+            ></div>
+            <aside
+                class="z-30 w-72 shrink-0 border-r border-white/70 bg-white/90 shadow-foundation backdrop-blur dark:border-slate-800 dark:bg-slate-950/95 max-lg:fixed max-lg:inset-y-0 max-lg:left-0 lg:sticky lg:top-0 lg:z-auto lg:h-screen"
+                :style="navOpen || window.matchMedia('(min-width: 1024px)').matches ? 'transform: none' : 'transform: translateX(-100%)'"
+                @click="if ($event.target.closest('a')) navOpen = false"
+            >
                 {{ $sidebar }}
             </aside>
         @endisset
 
         <div class="flex min-w-0 flex-1 flex-col">
+            @isset($sidebar)
+                <div class="sticky top-0 z-30 flex items-center gap-3 border-b border-white/70 bg-white/80 px-4 py-3 backdrop-blur dark:border-slate-800 dark:bg-slate-950/80 lg:hidden">
+                    <button
+                        type="button"
+                        class="inline-flex h-11 w-11 items-center justify-center rounded-2xl text-white shadow-lg shadow-slate-900/10 foundation-mark"
+                        @click="navOpen = true"
+                        aria-label="Open navigation"
+                    >
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h10" />
+                        </svg>
+                    </button>
+                    <p class="truncate text-sm font-extrabold tracking-tight">{{ $brandName }}</p>
+                </div>
+            @endisset
+
             @isset($topbar)
                 {{ $topbar }}
             @else
