@@ -1,0 +1,21 @@
+<?php
+
+namespace App\Core\Billing\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+class PlanCapability extends Model
+{
+    protected $fillable = ['plan_id', 'capability', 'enabled'];
+
+    protected function casts(): array
+    {
+        return ['enabled' => 'boolean'];
+    }
+
+    public function plan(): BelongsTo
+    {
+        return $this->belongsTo(Plan::class);
+    }
+}

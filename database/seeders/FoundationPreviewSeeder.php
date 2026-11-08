@@ -6,6 +6,7 @@ use App\Core\Authorization\FoundationPermissions;
 use App\Core\Tenancy\Models\Tenant;
 use App\Core\Tenancy\Models\TenantMembership;
 use App\Core\Tenancy\Models\TenantSettings;
+use App\Core\Tenancy\Services\TenantContext;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
@@ -60,24 +61,31 @@ class FoundationPreviewSeeder extends Seeder
                 ['name' => $definition['name'], 'is_active' => true],
             );
 
-            TenantSettings::query()->updateOrCreate(
-                ['tenant_id' => $tenant->getKey()],
-                [
-                    'locale' => 'es',
-                    'timezone' => $definition['timezone'],
-                    'currency' => $definition['currency'],
-                    'theme' => 'light',
-                    'primary_color' => $definition['primary_color'],
-                    'secondary_color' => $definition['secondary_color'],
-                    'date_format' => 'd-m-Y',
-                    'time_format' => 'H:i',
-                ],
-            );
+            $context = app(TenantContext::class);
+            $context->set($tenant);
 
-            TenantMembership::query()->updateOrCreate(
-                ['tenant_id' => $tenant->getKey(), 'user_id' => $user->getKey()],
-                ['is_active' => true, 'is_default' => $definition['is_default']],
-            );
+            try {
+                TenantSettings::query()->updateOrCreate(
+                    ['tenant_id' => $tenant->getKey()],
+                    [
+                        'locale' => 'es',
+                        'timezone' => $definition['timezone'],
+                        'currency' => $definition['currency'],
+                        'theme' => 'light',
+                        'primary_color' => $definition['primary_color'],
+                        'secondary_color' => $definition['secondary_color'],
+                        'date_format' => 'd-m-Y',
+                        'time_format' => 'H:i',
+                    ],
+                );
+
+                TenantMembership::query()->updateOrCreate(
+                    ['tenant_id' => $tenant->getKey(), 'user_id' => $user->getKey()],
+                    ['is_active' => true, 'is_default' => $definition['is_default']],
+                );
+            } finally {
+                $context->clear();
+            }
         }
 
         $this->call(AuthorizationSeeder::class);

@@ -4,6 +4,7 @@ namespace Tests\Support;
 
 use App\Core\Tenancy\Models\Tenant;
 use App\Core\Tenancy\Models\TenantMembership;
+use App\Core\Tenancy\Services\TenantContext;
 use App\Models\User;
 use Database\Seeders\FoundationPermissionSeeder;
 use Database\Seeders\FoundationRoleSeeder;
@@ -25,13 +26,24 @@ trait CreatesTenantMemberships
     protected function attachTenant(User $user, ?Tenant $tenant = null, array $attributes = []): Tenant
     {
         $tenant ??= $this->createTenant();
+        $context = app(TenantContext::class);
+        $previous = $context->get();
+        $context->set($tenant);
 
-        TenantMembership::query()->create(array_merge([
-            'tenant_id' => $tenant->getKey(),
-            'user_id' => $user->getKey(),
-            'is_active' => true,
-            'is_default' => false,
-        ], $attributes));
+        try {
+            TenantMembership::query()->create(array_merge([
+                'tenant_id' => $tenant->getKey(),
+                'user_id' => $user->getKey(),
+                'is_active' => true,
+                'is_default' => false,
+            ], $attributes));
+        } finally {
+            if ($previous === null) {
+                $context->clear();
+            } else {
+                $context->set($previous);
+            }
+        }
 
         return $tenant;
     }

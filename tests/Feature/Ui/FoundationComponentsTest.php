@@ -16,6 +16,7 @@ class FoundationComponentsTest extends TestCase
     public function test_app_shell_uses_branding_manager_values(): void
     {
         $tenant = $this->createTenant(['name' => 'Foundation Tenant']);
+        app(TenantContext::class)->set($tenant);
         TenantSettings::query()->create([
             'tenant_id' => $tenant->getKey(),
             'primary_color' => '#123456',

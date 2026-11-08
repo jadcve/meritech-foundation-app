@@ -16,6 +16,7 @@ class BrandingManagerTest extends TestCase
     public function test_loads_settings_from_current_tenant(): void
     {
         $tenant = $this->createTenant(['name' => 'Foundation Tenant A', 'slug' => 'foundation-a']);
+        app(TenantContext::class)->set($tenant);
         TenantSettings::query()->create([
             'tenant_id' => $tenant->getKey(),
             'locale' => 'es',
@@ -52,16 +53,20 @@ class BrandingManagerTest extends TestCase
     {
         $firstTenant = $this->createTenant(['name' => 'First Tenant', 'slug' => 'first-tenant']);
         $secondTenant = $this->createTenant(['name' => 'Second Tenant', 'slug' => 'second-tenant']);
+        $context = app(TenantContext::class);
+        $context->set($firstTenant);
         TenantSettings::query()->create([
             'tenant_id' => $firstTenant->getKey(),
             'primary_color' => '#0f766e',
             'secondary_color' => '#facc15',
         ]);
+        $context->set($secondTenant);
         TenantSettings::query()->create([
             'tenant_id' => $secondTenant->getKey(),
             'primary_color' => '#7c3aed',
             'secondary_color' => '#06b6d4',
         ]);
+        $context->clear();
 
         $context = app(TenantContext::class);
         $branding = app(BrandingManager::class);
@@ -103,12 +108,12 @@ class BrandingManagerTest extends TestCase
     {
         $firstTenant = $this->createTenant(['slug' => 'leak-source']);
         $secondTenant = $this->createTenant(['slug' => 'leak-target']);
+        $context = app(TenantContext::class);
+        $context->set($firstTenant);
         TenantSettings::query()->create([
             'tenant_id' => $firstTenant->getKey(),
             'primary_color' => '#dc2626',
         ]);
-
-        $context = app(TenantContext::class);
         $branding = app(BrandingManager::class);
 
         $context->set($firstTenant);

@@ -2,11 +2,14 @@
 
 namespace App\Core\Tenancy\Models;
 
+use App\Core\Tenancy\Concerns\BelongsToTenant;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TenantSettings extends Model
 {
+    use BelongsToTenant;
+
     protected $table = 'tenant_settings';
 
     protected $fillable = [
