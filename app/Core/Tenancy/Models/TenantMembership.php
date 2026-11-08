@@ -2,12 +2,16 @@
 
 namespace App\Core\Tenancy\Models;
 
+use App\Core\Tenancy\Concerns\BelongsToTenant;
+use App\Core\Tenancy\Scoping\TenantScope;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class TenantMembership extends Pivot
 {
+    use BelongsToTenant;
+
     protected $table = 'tenant_memberships';
 
     public $incrementing = true;
@@ -23,7 +27,7 @@ class TenantMembership extends Pivot
                 return;
             }
 
-            static::query()
+            static::withoutGlobalScope(TenantScope::class)
                 ->where('user_id', $membership->user_id)
                 ->when($membership->exists, fn ($query) => $query->where($membership->getKeyName(), '!=', $membership->getKey()))
                 ->update(['is_default' => false]);

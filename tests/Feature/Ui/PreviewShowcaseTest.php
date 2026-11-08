@@ -3,6 +3,9 @@
 namespace Tests\Feature\Ui;
 
 use App\Core\Tenancy\Models\Tenant;
+use App\Core\Tenancy\Models\TenantMembership;
+use App\Core\Tenancy\Scoping\TenantScope;
+use App\Core\Tenancy\Services\TenantContext;
 use App\Models\User;
 use Database\Seeders\FoundationPreviewSeeder;
 use Illuminate\Database\Eloquent\Model;
@@ -75,8 +78,11 @@ class PreviewShowcaseTest extends TestCase
 
         $this->assertNotNull($user);
         $this->assertNotNull($tenant);
-        $this->assertSame(3, $user->tenantMemberships()->count());
-        $this->assertSame(1, $user->tenantMemberships()->where('is_default', true)->count());
+        $memberships = TenantMembership::withoutGlobalScope(TenantScope::class)->where('user_id', $user->getKey());
+        $this->assertSame(3, (clone $memberships)->count());
+        $this->assertSame(1, (clone $memberships)->where('is_default', true)->count());
+
+        app(TenantContext::class)->set($tenant);
         $this->assertSame('#1d4ed8', $tenant->settings->primary_color);
 
         app(PermissionRegistrar::class)->setPermissionsTeamId($tenant->getKey());

@@ -1,12 +1,31 @@
 # Auditoría técnica de Meritech Foundation
 
-Fecha de ejecución: 8 de noviembre de 2026.
+Fecha de ejecución: 8 de noviembre de 2026. Remediación: el mismo día, sobre el commit `d59bda6`.
 
-## Veredicto
+## Estado tras la remediación
 
-Foundation **sirve como base técnica** para un SaaS multi-vertical, con condiciones. El esqueleto de Laravel, la autenticación, la tenencia por membresía, los permisos por tenant y el branding son reales y tienen pruebas.
+La base sigue sirviendo como esqueleto. Estos hallazgos de la lista priorizada quedaron cerrados en código y pruebas (99 pruebas, 326 aserciones):
 
-**No está listo** para guardar datos de salud, ni para operar reservas, caja o fichas clínicas. No hay aislamiento automático de datos de producto, ni cifrado de campos sensibles, ni bitácora, ni respaldos, ni módulos por tenant, ni facturación. Esas piezas hay que construirlas antes de cargar pacientes, resultados de laboratorio o información de vehículos.
+1. Aislamiento de datos. `BelongsToTenant` oculta filas sin contexto y rechaza escrituras cruzadas. `TenantCache` prefija llaves. `TenantStorage` escribe en `tenants/{id}/`. Los jobs restauran `foundation_tenant_id` y `RequiresTenantContext` falla si no había tenant al despachar. `foundation:tenant-check` ata un comando al tenant pedido. La fuga de `tenant_settings` queda cubierta por `tests/Feature/Tenancy/TenantIsolationTest.php`. ADR-008.
+2. `/register` responde 404 cuando `FOUNDATION_PUBLIC_REGISTRATION` es false.
+3. `ProtectsSensitiveAttributes` cifra campos declarados en `$sensitive`. `audit_logs` guarda vistas y cambios por tenant, con el detalle cifrado, y la capability `audit` está encendida. Respaldo local en `docs/04_DEVELOPMENT/RESPALDO.md`. ADR-009.
+4. Capabilities por tenant: override, luego plan de la suscripción activa, luego el default global. `servicios`, `salud` y `taller` nacen apagadas. El middleware y el gate `module` responden 403. `SubscriptionProvider` tiene implementación local, sin proveedor de pago. ADR-010.
+5. `.github/workflows/ci.yml` corre Pint, la suite y `npm run build` en runners de GitHub. Se eliminó `@tailwindcss/vite`.
+
+Sigue pendiente, y no entra en este cambio:
+
+- Selector de tenant para un usuario con varias membresías.
+- Índice único que impida dos membresías default por usuario.
+- Actualizar `laravel/framework` y Symfony por los avisos de `composer audit`.
+- Cifrar la sesión (`SESSION_ENCRYPT`) como decisión de despliegue.
+- Un `SubscriptionProvider` que cobre de verdad. La interfaz ya existe; no hay que registrarse en un servicio de pago para usarla.
+- Integración con Nexura y modelos de citas, fichas o vehículos. El trait está listo; esos modelos no pertenecen a Foundation.
+
+## Veredicto original
+
+Foundation sirve como base técnica, con condiciones. El esqueleto de Laravel, la autenticación, la tenencia por membresía, los permisos por tenant y el branding son reales y tienen pruebas.
+
+En la primera pasada no estaba listo para guardar datos de salud ni para operar reservas. No había aislamiento automático de datos de producto, ni cifrado de campos sensibles, ni bitácora, ni respaldos, ni módulos por tenant, ni facturación. La sección anterior marca qué parte de eso ya está en el código.
 
 Después de la corrección de este cambio, un `composer install --no-dev` sigue instalando `spatie/laravel-permission`. Antes, ese paquete estaba solo en `require-dev` y el arranque de producción quedaba roto.
 
@@ -17,7 +36,7 @@ Después de la corrección de este cambio, un `composer install --no-dev` sigue 
 | Comando | Resultado |
 | --- | --- |
 | `composer install` con PHP 8.4.27 | Completó. PHP 8.3.6 no alcanza: el lock exige Symfony 8.1 (`php >= 8.4.1`). |
-| `php artisan test` en un árbol sin `.env` | Primera corrida: 79 pruebas, 30 ok, 49 errores por `APP_KEY` ausente. |
+| `php artisan test` en un árbol sin `.env` | La primera corrida falló por `APP_KEY` ausente. `tests/bootstrap.php` genera una llave al arrancar la suite. No queda commiteada. |
 | `php artisan test` tras las correcciones | 83 pruebas, 270 aserciones, todas verdes. |
 | `npm run build` | Verde. CSS ~55 kB. El pipeline activo es Tailwind **3.4.19** vía PostCSS. |
 | `composer install --no-dev --dry-run` | Quitarían 34 paquetes de desarrollo. `spatie/laravel-permission` 8.5.0 permanece en `packages`. |
@@ -81,24 +100,20 @@ Después de la corrección de este cambio, un `composer install --no-dev` sigue 
 Solo piezas de bajo riesgo y efecto claro:
 
 - `spatie/laravel-permission` pasó de `require-dev` a `require`. El lock quedó en 8.5.0.
-- `phpunit.xml` define `APP_KEY` y deja la vista previa apagada. Un checkout limpio puede correr la suite sin `.env`.
+- `phpunit.xml` deja la vista previa apagada. La suite genera `APP_KEY` en `tests/bootstrap.php` y CI también ejecuta `php artisan key:generate`.
 - Los seeders de permisos olvidan la caché de Spatie para que `db:seed` funcione con eventos apagados.
 - Tokens de vertical y modo `dark` por clase, más la vista previa `/ui/{vertical}` detrás de `FOUNDATION_UI_SHOWCASE` (default `false`).
 
 No se implementó scope global, cifrado, bitácora, CI ni billing. Eso cambia el contrato de datos y merece diseño propio.
 
-## Lista priorizada para después
+## Lista que sigue abierta
 
-1. Trait de tenencia obligatorio para todo modelo de producto, con scope global, `tenant_id` y pruebas de lectura/escritura cruzada. Aplicar el mismo criterio a jobs (payload con tenant y middleware de cola), caché (prefijo) y storage (directorio por tenant, sin `serve` público para archivos clínicos).
-2. Antes de cualquier dato de salud: cifrado en reposo de campos sensibles, bitácora de acceso, política de respaldo y restore probada, y sesión cifrada. La integración Nexura → ficha queda fuera hasta que eso exista.
-3. Hacer que `FOUNDATION_PUBLIC_REGISTRATION` cierre de verdad `/register`.
-4. Pipeline de CI: Pint, `php artisan test`, `npm run build`.
-5. Activación de módulos por tenant (servicios, salud, taller) encima del registry actual, no como booleanos globales.
-6. Selector de tenant cuando hay más de una membresía, sin romper el fail-closed.
-7. Índice de base que impida dos defaults por usuario.
-8. Actualizar `laravel/framework` y Symfony por los avisos de `composer audit`, en un PR dedicado.
-9. Decidir en una ADR si se elimina `@tailwindcss/vite` o se migra todo a Tailwind 4. Hoy el build v3 es el que vale.
-10. Facturación y suscripciones, cuando el producto tenga planes. No es prerequisito del esqueleto visual.
+1. Selector de tenant cuando hay más de una membresía, sin romper el fail-closed.
+2. Índice de base que impida dos defaults por usuario. Hoy lo garantiza el evento del modelo.
+3. Actualizar `laravel/framework` y Symfony por los avisos de `composer audit`, en un PR dedicado.
+4. Activar `SESSION_ENCRYPT` en el entorno que vaya a guardar datos sensibles.
+5. Implementar un proveedor de suscripción real cuando exista un cobro. La interfaz `SubscriptionProvider` ya está; la implementación incluida es local.
+6. Modelos de citas, fichas o vehículos en el producto que consuma Foundation, usando `BelongsToTenant`. La integración con Nexura sigue fuera.
 
 ## Sistema visual
 

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Tenancy;
 
+use App\Core\Tenancy\Scoping\TenantScope;
 use App\Core\Tenancy\Services\TenantBypassPolicy;
 use App\Core\Tenancy\Services\TenantContext;
 use App\Models\User;
@@ -55,9 +56,11 @@ class TenancyTest extends TestCase
         $firstTenant = $this->attachTenant($user, $this->createTenant(['slug' => 'first-default-tenant']), ['is_default' => true]);
         $secondTenant = $this->attachTenant($user, $this->createTenant(['slug' => 'second-default-tenant']), ['is_default' => true]);
 
-        $this->assertFalse($user->tenantMemberships()->whereBelongsTo($firstTenant)->first()->is_default);
-        $this->assertTrue($user->tenantMemberships()->whereBelongsTo($secondTenant)->first()->is_default);
-        $this->assertSame(1, $user->tenantMemberships()->where('is_default', true)->count());
+        $memberships = $user->tenantMemberships()->withoutGlobalScope(TenantScope::class);
+
+        $this->assertFalse($memberships->clone()->whereBelongsTo($firstTenant)->first()->is_default);
+        $this->assertTrue($memberships->clone()->whereBelongsTo($secondTenant)->first()->is_default);
+        $this->assertSame(1, $user->tenantMemberships()->withoutGlobalScope(TenantScope::class)->where('is_default', true)->count());
     }
 
     public function test_user_with_multiple_tenants_and_no_default_fails_closed(): void

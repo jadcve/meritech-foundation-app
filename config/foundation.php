@@ -34,6 +34,7 @@ return [
         'bypass' => [
             'enabled' => false,
         ],
+        'disk' => env('FOUNDATION_TENANT_DISK', 'local'),
     ],
 
     /*

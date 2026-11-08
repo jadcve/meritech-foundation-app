@@ -5,13 +5,14 @@ namespace App\Core\Tenancy\Services;
 use App\Core\Tenancy\Contracts\TenantContract;
 use App\Core\Tenancy\Contracts\TenantResolverContract;
 use App\Core\Tenancy\Models\TenantMembership;
+use App\Core\Tenancy\Scoping\TenantScope;
 use App\Models\User;
 
 class TenantResolver implements TenantResolverContract
 {
     public function resolve(User $user): ?TenantContract
     {
-        $memberships = TenantMembership::query()
+        $memberships = TenantMembership::withoutGlobalScope(TenantScope::class)
             ->whereBelongsTo($user)
             ->where('is_active', true)
             ->whereHas('tenant', fn ($query) => $query->where('is_active', true))

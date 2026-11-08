@@ -5,6 +5,7 @@ namespace Tests\Feature\Authorization;
 use App\Core\Authorization\FoundationPermissions;
 use App\Core\Authorization\TenantAuthorizationContext;
 use App\Core\Tenancy\Models\TenantMembership;
+use App\Core\Tenancy\Scoping\TenantScope;
 use App\Core\Tenancy\Services\TenantBypassPolicy;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -110,7 +111,7 @@ class AuthorizationTest extends TestCase
     {
         [$user] = $this->userWithTenantRole(FoundationPermissions::ADMIN);
 
-        TenantMembership::query()->whereBelongsTo($user)->delete();
+        TenantMembership::withoutGlobalScope(TenantScope::class)->whereBelongsTo($user)->delete();
 
         $this->actingAs($user)
             ->get('/tenant/settings')

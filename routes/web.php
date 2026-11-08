@@ -1,5 +1,6 @@
 <?php
 
+use App\Core\Tenancy\Models\TenantSettings;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Ui\PreviewController;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,18 @@ Route::get('/tenant/settings', function () {
 Route::patch('/tenant/settings', function () {
     return response('Tenant settings updated');
 })->middleware(['auth', 'verified', 'tenant.resolve', 'tenant.authorization', 'permission:settings.update'])->name('tenant.settings.update');
+
+Route::get('/tenant/settings/record/{settings}', function (TenantSettings $settings) {
+    return response()->json([
+        'id' => $settings->getKey(),
+        'tenant_id' => $settings->tenant_id,
+        'primary_color' => $settings->primary_color,
+    ]);
+})->middleware(['auth', 'verified', 'tenant.resolve', 'tenant.authorization', 'permission:settings.view'])->name('tenant.settings.record');
+
+Route::get('/tenant/modules/{module}', function (string $module) {
+    return response($module);
+})->middleware(['auth', 'verified', 'tenant.resolve', 'tenant.authorization', 'module'])->name('tenant.modules.show');
 
 Route::prefix('ui/{vertical}')->group(function () {
     Route::get('/', [PreviewController::class, 'dashboard'])->name('ui.preview.dashboard');
