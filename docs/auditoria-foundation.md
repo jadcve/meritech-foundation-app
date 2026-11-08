@@ -36,7 +36,7 @@ Después de la corrección de este cambio, un `composer install --no-dev` sigue 
 | Comando | Resultado |
 | --- | --- |
 | `composer install` con PHP 8.4.27 | Completó. PHP 8.3.6 no alcanza: el lock exige Symfony 8.1 (`php >= 8.4.1`). |
-| `php artisan test` en un árbol sin `.env` | Primera corrida: 79 pruebas, 30 ok, 49 errores por `APP_KEY` ausente. |
+| `php artisan test` en un árbol sin `.env` | La primera corrida falló por `APP_KEY` ausente. `tests/bootstrap.php` genera una llave al arrancar la suite. No queda commiteada. |
 | `php artisan test` tras las correcciones | 83 pruebas, 270 aserciones, todas verdes. |
 | `npm run build` | Verde. CSS ~55 kB. El pipeline activo es Tailwind **3.4.19** vía PostCSS. |
 | `composer install --no-dev --dry-run` | Quitarían 34 paquetes de desarrollo. `spatie/laravel-permission` 8.5.0 permanece en `packages`. |
@@ -100,7 +100,7 @@ Después de la corrección de este cambio, un `composer install --no-dev` sigue 
 Solo piezas de bajo riesgo y efecto claro:
 
 - `spatie/laravel-permission` pasó de `require-dev` a `require`. El lock quedó en 8.5.0.
-- `phpunit.xml` define `APP_KEY` y deja la vista previa apagada. Un checkout limpio puede correr la suite sin `.env`.
+- `phpunit.xml` deja la vista previa apagada. La suite genera `APP_KEY` en `tests/bootstrap.php` y CI también ejecuta `php artisan key:generate`.
 - Los seeders de permisos olvidan la caché de Spatie para que `db:seed` funcione con eventos apagados.
 - Tokens de vertical y modo `dark` por clase, más la vista previa `/ui/{vertical}` detrás de `FOUNDATION_UI_SHOWCASE` (default `false`).
 
